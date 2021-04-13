@@ -1,34 +1,34 @@
 const port = 3000,
- http = require("http"),
- httpStatus = require("http-status-codes"),
- app = http.createServer();
+    http = require("http"),
+    httpStatus = require("http-status-codes"),
+    router = require("./router"),
+    contentTypes = require("./contentTypes"),
+    utils = require("./utils");
 
- app.on("request", (req, res) => {
-    var body = [];
-    req.on("data", (bodyData) => {
-        body.push(bodyData);
+    router.get("/", (req, res) => {
+        res.writeHead(httpStatus.OK, contentTypes.html);
+        utils.getFile("views/index.html", res);
     });
 
-    req.on("end", () => {
-        body = Buffer.concat(body).toString();
-        console.log(`Request Body Contents: ${body}`);
+    router.get("/index.html", (req, res) => {
+        res.writeHead(httpStatus.OK, contentTypes.html);
+        utils.getFile("views/index.html", res);
     });
 
-    console.log(`Method: ${getJSONString(req.method)}`);
-    console.log(`URL: ${getJSONString(req.url)}`);
-    console.log(`Headers: ${getJSONString(req.headers)}`);
-
-    res.writeHead(httpStatus.OK, {
-        "Content-Type": "text/html"
+    router.get("/index", (req, res) => {
+        res.writeHead(httpStatus.OK, contentTypes.html);
+        utils.getFile("views/index.html", res);
     });
 
-    let responseMessage = "<h1>Seiteninhalt</h1>";
-    res.end(responseMessage);
-});
+    router.get("/info", (req, res) => {
+        res.writeHead(httpStatus.OK, contentTypes.html);
+        utils.getFile("views/info.html", res);
+    });
 
-app.listen(port);
-console.log(`The server is listening on port number: ${port}`);
+    router.get("/info.html", (req, res) => {
+        res.writeHead(httpStatus.OK, contentTypes.html);
+        utils.getFile("views/info.html", res);
+    });
 
-const getJSONString = obj => {
-    return JSON.stringify(obj, null, 2);
-};
+    http.createServer(router.handle).listen(port);
+    console.log(`The server is listening on port number: ${port}`);
